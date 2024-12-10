@@ -1,0 +1,30 @@
+{
+  "name": "@revenge-mod/keyutil",
+  "type": "module",
+  "bin": {
+    "rku": "./cli.ts",
+    "revenge-keyutil": "./cli.ts"
+  },
+  "exports": {
+    "./v1": {
+      "import": "./src/v1/index.ts",
+      "types": "./src/v1/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/bun": "latest",
+    "@types/node": "^22.10.1",
+    "@types/uzip": "^0.20201231.2",
+    "commander": "^12.1.0"
+  },
+  "peerDependencies": {
+    "@noble/hashes": "^1.6.1",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@noble/ed25519": "^2.1.0",
+    "uzip": "^0.20201231.0"
+  },
+  "trustedDependencies": ["@biomejs/biome"]
+}
