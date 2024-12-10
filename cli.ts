@@ -1,5 +1,6 @@
 #! /usr/bin/env bun
 
+import { sha512 } from '@noble/hashes/sha512'
 import { readFileSync, writeFileSync } from 'fs'
 import { program } from 'commander'
 
@@ -35,12 +36,12 @@ program
     .requiredOption('-s, --signature, -o, --output <path>', 'Path to signature')
     .requiredOption('-k, -pr, --private-key-path, --key-path <path>', 'Path to private key of the signer')
     .action((filePath, { signature: signatureFilePath, Pr: keyPath }) => {
-        const file = readFileSync(filePath)
+        const hash = sha512(readFileSync(filePath))
         const key = readRevengeKey(readFileSync(keyPath).buffer as ArrayBuffer)
 
         if (!key.isPrivate()) throw new Error('Key must be a private key')
 
-        const signature = key.sign(file)
+        const signature = key.sign(hash)
         writeFileSync(signatureFilePath, Buffer.from(signature.toArrayBuffer()))
 
         console.log(`Signed ${filePath} and saved signature to ${signatureFilePath}`)
@@ -53,13 +54,13 @@ program
     .requiredOption('-s, --signature, -o, --output <path>', 'Path to signature')
     .requiredOption('-k, -pb, --public-key-path, --key-path <path>', 'Path to public key of the signer')
     .action((filePath, { signature: signatureFilePath, Pb: keyPath }) => {
-        const file = readFileSync(filePath)
+        const hash = sha512(readFileSync(filePath))
         const signature = readRevengeSignature(readFileSync(signatureFilePath).buffer as ArrayBuffer)
         const key = readRevengeKey(readFileSync(keyPath).buffer as ArrayBuffer)
 
         if (!key.isPublic()) throw new Error('Key must be a public key')
 
-        const isValid = key.verify(signature.signature, file)
+        const isValid = key.verify(signature.signature, hash)
         console.log(`Signature is ${isValid ? 'valid' : 'invalid'}`)
     })
 
