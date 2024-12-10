@@ -58,3 +58,25 @@ rku signature-info data.txt.sig
 # Signed-By: ...
 # Signature: ........
 ```
+
+## Certify another key
+
+If the client chooses to trust you, certifying *can* make it trust the other key too.
+
+The example certifee key is already certified by the example key, you can just skip this step. Although recertifying it will not cause any harm.
+
+```sh
+rku certify certifee/public_key -k private_key
+```
+
+## Get information about a certification
+
+```sh
+rku certification-info certifee/public_key public_key
+
+# Output:
+# 
+# Certified-By: ....
+# Signature: ........
+# Valid: true
+```
