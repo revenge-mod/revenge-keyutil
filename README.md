@@ -16,13 +16,13 @@ GPG is great, but there aren't any known GPG/PGP libraries that work under React
 2. Install the package
 
    ```sh
-    bun install https://github.com/revenge-mod/revenge-keyutil
+   bun install https://github.com/revenge-mod/revenge-keyutil
    ```
 
 3. Run the CLI
 
    ```sh
-   bun run revenge-keyutil
+   revenge-keyutil
    ```
 
 ### Example
