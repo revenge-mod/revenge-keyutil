@@ -25,6 +25,10 @@ GPG is great, but there aren't any known GPG/PGP libraries that work under React
    bun run revenge-keyutil
    ```
 
+### Example
+
+Check the [example](./example) directory.
+
 ## Licence
 
 This project is licensed under the [MIT Licence](./LICENSE).
