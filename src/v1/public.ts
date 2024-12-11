@@ -67,6 +67,7 @@ export class RevengePublicKeyV1 {
     }
 
     verify(signature: Signature, data: Uint8Array | string) {
+        if (this.expired) return false
         return verify(signature, data, this.key)
     }
 
