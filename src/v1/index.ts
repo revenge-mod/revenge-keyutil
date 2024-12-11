@@ -12,6 +12,11 @@ import { u8ArrayToU64, u8ToString } from '../utils'
 
 ed.etc.sha512Sync = sha512
 
+export * from './certification'
+export * from './private'
+export * from './public'
+export * from './signature'
+
 export interface CreateRevengeKeyPairOptions {
     name: string
     expires: bigint

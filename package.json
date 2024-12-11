@@ -9,6 +9,14 @@
     "./v1": {
       "import": "./src/v1/index.ts",
       "types": "./src/v1/index.ts"
+    },
+    "./shared": {
+      "import": "./src/shared.ts",
+      "types": "./src/shared.ts"
+    },
+    "./utils": {
+      "import": "./src/utils.ts",
+      "types": "./src/utils.ts"
     }
   },
   "devDependencies": {
