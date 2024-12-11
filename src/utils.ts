@@ -22,10 +22,10 @@ export function toHex(u8: Uint8Array) {
         .join('')
 }
 
-export function u8ToString(u8: Uint8Array) {
-    return new TextDecoder().decode(u8)
+export function bufToString(buf: AllowSharedBufferSource) {
+    return new TextDecoder().decode(buf)
 }
 
-export function stringToU8(str: string) {
+export function strToU8(str: string) {
     return new TextEncoder().encode(str)
 }

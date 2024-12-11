@@ -3,7 +3,7 @@ import { sha512 } from '@noble/hashes/sha512'
 import { encode } from 'uzip'
 
 import { KeyType } from '../shared'
-import { stringToU8, toKeyId, u64ToU8Array } from '../utils'
+import { strToU8, toKeyId, u64ToU8Array } from '../utils'
 
 import type { Key, KeyID, SpecVersion, Signature } from '../shared'
 import type { RevengeCertificationV1 } from './certification'
@@ -77,7 +77,7 @@ export class RevengePublicKeyV1 {
 
     static infoToArrayBuffer(info: RevengePublicKeyV1Info) {
         return encode({
-            n: stringToU8(info.name),
+            n: strToU8(info.name),
             e: u64ToU8Array(info.expires),
         } satisfies InternalPublicKeyV1Info)
     }

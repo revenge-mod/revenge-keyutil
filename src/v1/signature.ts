@@ -1,7 +1,7 @@
 import { verify } from '@noble/ed25519'
 import { encode } from 'uzip'
 
-import { stringToU8 } from '../utils'
+import { strToU8 } from '../utils'
 
 import type { SpecVersion } from '../shared'
 
@@ -27,7 +27,7 @@ export class RevengeSignatureV1 {
 
     toArrayBuffer() {
         return encode({
-            i: stringToU8(this.signerPublicId),
+            i: strToU8(this.signerPublicId),
             s: this.signature,
         } satisfies InternalRevengeSignatureV1)
     }

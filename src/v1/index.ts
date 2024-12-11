@@ -8,7 +8,7 @@ import { RevengePublicKeyV1 } from './public'
 import { RevengeSignatureV1 } from './signature'
 
 import { KeySize, KeyType, SignatureSize } from '../shared'
-import { u8ArrayToU64, u8ToString } from '../utils'
+import { u8ArrayToU64, bufToString } from '../utils'
 
 ed.etc.sha512Sync = sha512
 
@@ -74,7 +74,7 @@ export function readRevengeKey(key: ArrayBuffer) {
                 info: {
                     publicKey: pk,
                     publicKeyInfo: {
-                        name: u8ToString(n),
+                        name: bufToString(n),
                         expires: u8ArrayToU64(e),
                     },
                 },
@@ -96,7 +96,7 @@ export function readRevengeKey(key: ArrayBuffer) {
                 ),
                 signature: is,
                 info: {
-                    name: u8ToString(n),
+                    name: bufToString(n.buffer as ArrayBuffer),
                     expires: u8ArrayToU64(e),
                 },
             })
@@ -112,7 +112,7 @@ export function readRevengeSignature(signature: ArrayBuffer) {
     if (!s || !i) throw new Error('Invalid signature file format')
 
     return new RevengeSignatureV1({
-        signerPublicId: u8ToString(i),
+        signerPublicId: bufToString(i),
         signature: s,
     })
 }
