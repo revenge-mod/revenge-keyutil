@@ -90,6 +90,7 @@ program
                 new Date(Number(key.info.expires) * 1000).toISOString(),
                 `(${key.expired ? 'Expired' : 'Valid'})`,
             )
+            console.log('Valid:', key.isValid())
 
             console.log('')
             if (longSignatures) console.log(`Signature: ${toHex(key.signature)}`)

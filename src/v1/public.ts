@@ -66,6 +66,10 @@ export class RevengePublicKeyV1 {
         } satisfies InternalPublicKeyV1)
     }
 
+    isValid() {
+        return this.verify(this.signature, RevengePublicKeyV1.infoToSignatureDataUint8Array(this.info))
+    }
+
     verify(signature: Signature, data: Uint8Array | string) {
         if (this.expired) return false
         return verify(signature, data, this.key)
@@ -76,6 +80,10 @@ export class RevengePublicKeyV1 {
             n: stringToU8(info.name),
             e: u64ToU8Array(info.expires),
         } satisfies InternalPublicKeyV1Info)
+    }
+
+    static infoToSignatureDataUint8Array(info: RevengePublicKeyV1Info) {
+        return sha512(new Uint8Array(RevengePublicKeyV1.infoToArrayBuffer(info)))
     }
 
     get expired() {

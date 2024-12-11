@@ -57,7 +57,7 @@ export class RevengePrivateKeyV1 {
     }
 
     #getPublicKeySignature() {
-        return this.#sign(sha512(new Uint8Array(RevengePublicKeyV1.infoToArrayBuffer(this.info.publicKeyInfo))))
+        return this.#sign(RevengePublicKeyV1.infoToSignatureDataUint8Array(this.info.publicKeyInfo))
     }
 
     toArrayBuffer() {
