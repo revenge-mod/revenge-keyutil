@@ -1,9 +1,9 @@
 import { verify } from '@noble/ed25519'
-import { encode } from 'uzip'
 
 import { strToU8 } from '../utils'
 
 import type { SpecVersion } from '../shared'
+import type { ZipConvertible } from '../buffer'
 
 export interface RevengeSignatureV1Options {
     signerPublicId: string
@@ -15,7 +15,7 @@ interface InternalRevengeSignatureV1 {
     s: Uint8Array
 }
 
-export class RevengeSignatureV1 {
+export class RevengeSignatureV1 implements ZipConvertible {
     signerPublicId: string
     signature: Uint8Array
     version: SpecVersion = 1
@@ -25,11 +25,11 @@ export class RevengeSignatureV1 {
         this.signature = signature
     }
 
-    toArrayBuffer() {
-        return encode({
+    toZipStructure() {
+        return {
             i: strToU8(this.signerPublicId),
             s: this.signature,
-        } satisfies InternalRevengeSignatureV1)
+        } satisfies InternalRevengeSignatureV1
     }
 
     verify(publicKey: Uint8Array, data: Uint8Array) {

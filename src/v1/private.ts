@@ -1,14 +1,16 @@
 import { sign } from '@noble/ed25519'
 import { sha512 } from '@noble/hashes/sha512'
-import { encode } from 'uzip'
+import { zipSync, type Zippable } from 'fflate/browser'
 
 import { KeyType } from '../shared'
 import { toKeyId } from '../utils'
 import { RevengeCertificationV1 } from './certification'
 import { RevengePublicKeyV1, type RevengePublicKeyV1Info } from './public'
 
-import type { Key, KeyID, SpecVersion, Signature } from '../shared'
 import { RevengeSignatureV1 } from './signature'
+
+import type { Key, KeyID, SpecVersion, Signature } from '../shared'
+import type { ZipConvertible } from '../buffer'
 
 export interface RevengePrivateKeyV1Info {
     publicKey: Key
@@ -26,7 +28,7 @@ export interface RevengePrivateKeyV1Options {
 }
 
 type InternalPrivateKeyV1Info = {
-    pi: Uint8Array
+    pi: Zippable
     pis: Signature
 }
 
@@ -37,7 +39,7 @@ type InternalPrivateKeyV1 = {
     t: Uint8Array
 }
 
-export class RevengePrivateKeyV1 {
+export class RevengePrivateKeyV1 implements ZipConvertible {
     type = KeyType.Private as const
     info: RevengePrivateKeyV1Info
     key: Key
@@ -60,20 +62,18 @@ export class RevengePrivateKeyV1 {
         return this.#sign(RevengePublicKeyV1.infoToSignatureDataUint8Array(this.info.publicKeyInfo))
     }
 
-    toArrayBuffer() {
-        const eInfo = encode({
-            pi: new Uint8Array(RevengePublicKeyV1.infoToArrayBuffer(this.info.publicKeyInfo)),
+    toZipStructure(): Zippable {
+        const zi = zipSync({
+            pi: RevengePublicKeyV1.infoToZipStructure(this.info.publicKeyInfo),
             pis: this.#getPublicKeySignature(),
         } satisfies InternalPrivateKeyV1Info)
 
-        const t = new Uint8Array([(this.version << 4) | (this.type & 0x0f)])
-
-        return encode({
+        return {
             k: this.key,
-            i: new Uint8Array(eInfo),
-            is: this.#sign(new Uint8Array(eInfo)),
-            t,
-        } satisfies InternalPrivateKeyV1)
+            i: zi,
+            is: this.#sign(zi),
+            t: new Uint8Array([(this.version << 4) | (this.type & 0x0f)]),
+        } satisfies InternalPrivateKeyV1
     }
 
     sign(data: Uint8Array) {

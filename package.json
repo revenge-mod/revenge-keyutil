@@ -10,6 +10,10 @@
       "import": "./src/v1/index.ts",
       "types": "./src/v1/index.ts"
     },
+    "./buffer": {
+      "import": "./src/buffer.ts",
+      "types": "./src/buffer.ts"
+    },
     "./shared": {
       "import": "./src/shared.ts",
       "types": "./src/shared.ts"
@@ -23,7 +27,6 @@
     "@biomejs/biome": "^1.9.4",
     "@types/bun": "latest",
     "@types/node": "^22.10.1",
-    "@types/uzip": "^0.20201231.2",
     "commander": "^12.1.0"
   },
   "peerDependencies": {
@@ -32,7 +35,7 @@
   },
   "dependencies": {
     "@noble/ed25519": "^2.1.0",
-    "uzip": "^0.20201231.0"
+    "fflate": "^0.8.2"
   },
   "trustedDependencies": ["@biomejs/biome"]
 }

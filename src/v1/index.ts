@@ -1,6 +1,6 @@
 import * as ed from '@noble/ed25519'
 import { sha512 } from '@noble/hashes/sha512'
-import { parse } from 'uzip'
+import { unzipSync } from 'fflate/browser'
 
 import { RevengeCertificationV1 } from './certification'
 import { RevengePrivateKeyV1 } from './private'
@@ -45,13 +45,13 @@ export function createRevengeKeyPair({ name, expires }: CreateRevengeKeyPairOpti
     }
 }
 
-export function readRevengeKey(key: ArrayBuffer) {
-    const { t, k, i, is, c } = parse(key)
+export function readRevengeKey(key: Uint8Array) {
+    const { t, k, i, is, c } = unzipSync(key)
 
     if (!t || t.length !== 1 || !k || k.length !== KeySize || !i || !is || is.length !== SignatureSize)
         throw new Error('Invalid key file format')
 
-    const { pi, pis, n, e } = parse(i.buffer as ArrayBuffer)
+    const { pi, pis, n, e } = unzipSync(i)
 
     const version = (t[0] >> 4) & 0x0f
     const type = t[0] & 0x0f
@@ -67,7 +67,7 @@ export function readRevengeKey(key: ArrayBuffer) {
             if (!RevengePublicKeyV1.prototype.verify.call({ key: pk }, pis, sha512(pi)))
                 throw new Error("Public key information's signature could not be verified")
 
-            const { n, e } = parse(pi.buffer as ArrayBuffer)
+            const { n, e } = unzipSync(pi)
 
             return new RevengePrivateKeyV1({
                 key: k,
@@ -84,7 +84,7 @@ export function readRevengeKey(key: ArrayBuffer) {
         case KeyType.Public: {
             if (!n || !e || !c) throw new Error('Invalid public key file format')
 
-            const certs = parse(c.buffer as ArrayBuffer)
+            const certs = unzipSync(c)
 
             return new RevengePublicKeyV1({
                 key: k,
@@ -107,8 +107,8 @@ export function readRevengeKey(key: ArrayBuffer) {
     }
 }
 
-export function readRevengeSignature(signature: ArrayBuffer) {
-    const { s, i } = parse(signature)
+export function readRevengeSignature(signature: Uint8Array) {
+    const { s, i } = unzipSync(signature)
     if (!s || !i) throw new Error('Invalid signature file format')
 
     return new RevengeSignatureV1({
