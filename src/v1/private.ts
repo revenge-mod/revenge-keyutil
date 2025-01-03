@@ -64,7 +64,7 @@ export class RevengePrivateKeyV1 implements ZipConvertible {
 
     toZipStructure() {
         const zi = zipSync({
-            pi: zipSync(RevengePublicKeyV1.infoToZipStructure(this.info.publicKeyInfo)),
+            pi: zipSync(RevengePublicKeyV1.infoToZipStructure(this.info.publicKeyInfo), { mtime: '1980' }),
             pis: this.#getPublicKeySignature(),
         } satisfies InternalPrivateKeyV1Info)
 

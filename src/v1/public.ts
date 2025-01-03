@@ -80,7 +80,7 @@ export class RevengePublicKeyV1 implements ZipConvertible {
     }
 
     static infoToSignatureDataUint8Array(info: RevengePublicKeyV1Info) {
-        return sha512(zipSync(RevengePublicKeyV1.infoToZipStructure(info)))
+        return sha512(zipSync(RevengePublicKeyV1.infoToZipStructure(info), { mtime: '1980' }))
     }
 
     get expired() {
