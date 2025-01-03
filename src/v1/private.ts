@@ -28,7 +28,7 @@ export interface RevengePrivateKeyV1Options {
 }
 
 type InternalPrivateKeyV1Info = {
-    pi: Zippable
+    pi: Uint8Array
     pis: Signature
 }
 
@@ -62,9 +62,9 @@ export class RevengePrivateKeyV1 implements ZipConvertible {
         return this.#sign(RevengePublicKeyV1.infoToSignatureDataUint8Array(this.info.publicKeyInfo))
     }
 
-    toZipStructure(): Zippable {
+    toZipStructure() {
         const zi = zipSync({
-            pi: RevengePublicKeyV1.infoToZipStructure(this.info.publicKeyInfo),
+            pi: zipSync(RevengePublicKeyV1.infoToZipStructure(this.info.publicKeyInfo)),
             pis: this.#getPublicKeySignature(),
         } satisfies InternalPrivateKeyV1Info)
 

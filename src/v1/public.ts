@@ -24,11 +24,13 @@ export interface RevengePublicKeyV1Info {
 
 type InternalPublicKeyV1Info = Record<'n' | 'e', Uint8Array>
 
+type InternalPublicKeyV1Certifications = Record<KeyID, Signature>
+
 type InternalPublicKeyV1 = {
     k: Key
-    i: Zippable
+    i: Uint8Array
     is: Signature
-    c: Record<KeyID, Signature>
+    c: Uint8Array
     t: Uint8Array
 }
 
@@ -52,9 +54,11 @@ export class RevengePublicKeyV1 implements ZipConvertible {
     toZipStructure() {
         return {
             k: this.key,
-            i: RevengePublicKeyV1.infoToZipStructure(this.info),
+            i: zipSync(RevengePublicKeyV1.infoToZipStructure(this.info)),
             is: this.signature,
-            c: Object.fromEntries(Object.entries(this.certifications).map(([id, cert]) => [id, cert.signature])),
+            c: zipSync(
+                Object.fromEntries(Object.entries(this.certifications).map(([id, cert]) => [id, cert.signature])),
+            ),
             t: new Uint8Array([(this.version << 4) | (this.type & 0x0f)]),
         } satisfies InternalPublicKeyV1
     }
